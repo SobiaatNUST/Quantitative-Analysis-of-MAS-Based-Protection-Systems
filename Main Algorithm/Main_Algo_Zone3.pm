@@ -44,7 +44,7 @@ module DG1
 	// 2: Non-zero/2A current
 
 	[] (DG1=0&IDG1=0&FC3=1)  ->    0.5:(DG1'=1)&(IDG1'=0)
-		    			              +0.5:(DG1'=2)&(IDG1'=2);
+		    		      +0.5:(DG1'=2)&(IDG1'=2);
 
 endmodule
 
@@ -81,10 +81,10 @@ module CB1
 
 	 // Breaker can be open or close initially  
 	[] (b1=0&sw>0&BC1=0)&(DG1>0&DG2>0&DG3>0&DG4>0)  ->   0.5:(b1'=1)&(ICB1_F'=0)
-			                   			            +0.5:(b1'=2)&(ICB1_F'=IMG);
+			                   		     +0.5:(b1'=2)&(ICB1_F'=IMG);
 	// Relay has sent command to breaker					                           
 	[] (b1=2&BC1=1&FC3=1)  ->  1-BRK:(b1'=1)&(isol'=true)&(FC3'=0)
-							           +BRK:(b1'=3)&(isol'=false)&(FC3'=1);
+				   +BRK:(b1'=3)&(isol'=false)&(FC3'=1);
 			                   
 
 endmodule
@@ -119,13 +119,13 @@ module CB3
 	
 	// Breaker can be open or close initially 
 	[] (b3=0&BC3=0)&(sw=1|(sw=2& b1=1))&(DG1>0&DG2>0&DG3>0&DG4>0)  ->  0.5:(b3'=1)&(ICB3_F'=0)
-			                  		                          +0.5:(b3'=2)&(ICB3_F'=IMG);
+			                  		                   +0.5:(b3'=2)&(ICB3_F'=IMG);
 		
 	[] (b3=0&sw=2&b1=2)&(DG1>0&DG2>0&DG3>0&DG4>0)  ->  (b3'=1)&(ICB3_F'=0);
 		
      // Relay has sent command to breaker							                        
 	[] (b3=2&BC3=1&FC3=1)  -> 1-BRK:(b3'=1)&(isol'=true)&(FC3'=0)
-							          +BRK:(b3'=3)&(isol'=false)&(FC3'=1);
+				 +BRK:(b3'=3)&(isol'=false)&(FC3'=1);
 
 endmodule
 
@@ -162,7 +162,7 @@ module R1
 					                 -> (r1'=6); 
 	// Operation R1 act as backup relay
 	[] (r1=5&(WD2=1|(CT2=1&(r2=2|b2=3))))&(FC3=1)  ->  1-IED:(r1'=1)&(BC1'=1)
-			          			           +IED:(r1'=2)&(BC1'=2);
+			          			   +IED:(r1'=2)&(BC1'=2);
 	// tb<<tp
 	[] (r1=5&(CT2=2&r2=3))&(FC3=1)  ->  1-IED:(r1'=1)&(BC1'=1)&(False_trip'=true)
 			            	   +IED:(r1'=2)&(BC1'=2)&(False_trip'=false);
@@ -207,7 +207,7 @@ module R2
 	// Operation R2 act as backup relay
 
 	[] (r2=5&FC3=1)&(WD3=1|(WD3=2&CT3=1&(r3=2|b3=3)))  ->  1-IED:(r2'=1)&(BC2'=1)
-			          				               +IED:(r2'=2)&(BC2'=2);
+			          			      +IED:(r2'=2)&(BC2'=2);
 	//tb<<tp
 	[] (r2=5&(CT3=2&r3=3))&(FC3=1)  ->  1-IED:(r2'=1)&(BC2'=1)&(False_trip'=true)
 			                    +IED:(r2'=2)&(BC2'=2)&(False_trip'=false);
@@ -306,7 +306,7 @@ module Watchdog3
 
 	[] (WD3=0&CT3=0)&(r2=5&r3=5&(r4=6)&(r1=6|(b1=2&(b2=1|sw=1))))
 				 		->  1-WD: (WD3'=2)
-		                            +WD:(WD3'=1); 
+		                                    +WD:(WD3'=1); 
 
 endmodule
 
@@ -319,7 +319,7 @@ module Watchdog2
 
 	[] (WD2=0&CT2=0)&(r2=5&r1=5&(r3=6)&(r4=6))
 					->  1-WD:(WD2'=2)
-		           +WD:(WD2'=1); 
+		                            +WD:(WD2'=1); 
 
 endmodule
 
@@ -334,7 +334,7 @@ module CT3_Chk
 
 	[](CT3=0)&(WD3=2)  ->   1/3:(CT3'=1)
 			    	+1/3:(CT3'=2) 
-					        +1/3:(CT3'=3);
+				+1/3:(CT3'=3);
 endmodule
 
 module CT2_Chk
@@ -345,7 +345,7 @@ module CT2_Chk
  	//3: CTM out of range (CTM>0.4)
 	
 	[](CT2=0)&(WD2=2)  ->   1/3:(CT2'=1)
-				       +1/3:(CT2'=2)
+			        +1/3:(CT2'=2)
                                +1/3:(CT2'=3);			    	    
 endmodule
 
