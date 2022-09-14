@@ -60,3 +60,9 @@ Table below shows the quantitive verification results obtained using two algorit
         <td>0.0434</td>
     </tr>
 </table>
+
+For more information, please feel free to contact sashraf.dphd19seecs@seecs.edu.pk
+
+[1]  B. Fani, E. Abbaspour, and A. Karami-Horestani
+    “A fault-clearing algorithm supporting the mas-based protection schemes,”
+    International Journal of Electrical Power & Energy Systems, vol. 103, pp. 257–266,2018.
