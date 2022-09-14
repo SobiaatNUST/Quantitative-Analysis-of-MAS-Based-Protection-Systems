@@ -44,7 +44,7 @@ module DG1
 	// 2: Non-zero/2A current
 
 	[] (DG1=0&IDG1=0&FC4=1)  ->    0.5: (DG1'=1)&(IDG1'=0)
-		    			              +0.5:(DG1'=2)&(IDG1'=2);
+		    		      +0.5:(DG1'=2)&(IDG1'=2);
 
 endmodule
 
@@ -83,10 +83,10 @@ module CB1
 
  	[] (b1=0&BC1=0)&(sw=1|sw=2)&(DG1>0&DG2>0&DG3>0&DG4>0) 
 						       ->  0.5:(b1'=1)& (ICB1_F'=0)
-			          +0.5:(b1'=2)& (ICB1_F'=IMG);
+			         		           +0.5:(b1'=2)& (ICB1_F'=IMG);
 	// Relay has sent command to breaker							                           
         [] (b1=2&BC1=1)  ->  1-BRK:(b1'=1)&(isol'=true)
-							     +BRK:(b1'=3)&(isol'=false); 
+			    +BRK:(b1'=3)&(isol'=false); 
 			                   
 
 endmodule
@@ -103,12 +103,12 @@ module CB3
 
 	[] (b3=0&BC3=0)&((b1=2&sw=1)|b1=1)&(DG1>0&DG2>0&DG3>0&DG4>0) 
 						    ->   0.5:(b3'=1)&(ICB3_F'=0)
-			        +0.5:(b3'=2)&(ICB3_F'=IMG);
+			       				 +0.5:(b3'=2)&(ICB3_F'=IMG);
 												                                
 	[] (b3=0&sw=2& b1=2)&(DG1>0&DG2>0&DG3>0&DG4>0) -> (b3'=1)&(ICB3_F'=0);
 	// Relay has sent command to breaker	
         [] (b3=2&BC3=1)	  ->   1-BRK:(b3'=1)&(isol'=true)
-							      +BRK:(b3'=3)&(isol'=false);
+			      +BRK:(b3'=3)&(isol'=false);
 			                   
 
 endmodule
@@ -127,7 +127,7 @@ module CB2
 
 	[] (b2=0&BC2=0)&(DG1>0&DG2>0&DG3>0&DG4>0)&(b1>0&b3>0&sw>0)  
 					    -> 0.5:(b2'=1)& (ICB2_F'=0)
-			      +0.5:(b2'=2)&(ICB2_F'=ICB1_F+IDG1+IDG2);
+			    		      +0.5:(b2'=2)&(ICB2_F'=ICB1_F+IDG1+IDG2);
 	// Relay has sent command to breaker	
 	[] (b2=2&BC2=1) ->  1-BRK:(b2'=1)&(isol'=true)
 			   +BRK:(b2'=3)&(isol'=false); 
@@ -144,12 +144,12 @@ module CB4
 	// 3: Fail to open
 	
         // Breaker can be open or close initially 
-	[] (b4=0&BC4=0)&(DG1>0&DG2>0&DG3>0&DG4>0)&(b1>0&b3>0&sw>0&b2>0)   
-						               ->  0.5:(b4'=1)&(ICB4_F'=0)
-			                  +0.5:(b4'=2)&(ICB4_F'=ICB3_F+IDG3+IDG4+ICB1_F+IDG1+IDG2);
+	[] (b4=0&BC4=0)&(DG1>0&DG2>0&DG3>0&DG4>0)&(b1>0&b3>0&sw>0&b2>0)   ->  0.5:(b4'=1)&(ICB4_F'=0)
+			                 				     +0.5:(b4'=2)&(ICB4_F'=ICB3_F+IDG3+IDG4+ICB1_F+IDG1+IDG2); 
+						              
 	// Relay has sent command to breaker								                           
 	[] (b4=2&BC4=1)  ->  1-BRK:(b4'=1)&(isol'=true)
-							    +BRK:(b4'=3)&(isol'=false);
+			     +BRK:(b4'=3)&(isol'=false);			    
 			                   
 
 endmodule
@@ -185,11 +185,11 @@ module R1
 	// Active/Passive mode check  	
 	[] (r1=0&FC4=1&sel1=4)&(r1_nbr<z_nbr)&(b1=2)&(b2=2&b3>0&b4=2&sw=2)  
                               -> (IR1_F'=ICB1_F)&(sel1'=-(r1_nbr-z_nbr));
-	[] (r1=0&!sel1=4&IR1_F>0)&(b1=2&b2=2&b3>0&sw=2&b4=2)  
-					          -> (r1'=5);
+	[] (r1=0&!sel1=4&IR1_F>0)&(b1=2&b2=2&b3>0&sw=2&b4=2)  -> (r1'=5); 
+					         
          
-	[] (r1=0&sel1=4&IR1_F=0)&((b1=1)&b2>0&b3>0&sw>0&b4>0)  
-					         -> (r1'=6); 
+	[] (r1=0&sel1=4&IR1_F=0)&((b1=1)&b2>0&b3>0&sw>0&b4>0)  -> (r1'=6); 
+					         
 	// Operation mode 
 	[lock3] (r1=5&s2=0)  ->  (r1'=3); //lok //prim
 	[prim3] (r1=3&TL1=0)  ->  (r1'=4);
@@ -200,7 +200,7 @@ module R1
 			                +0.45:(r1'=4)&(TL1'=2);
 	//Breaker signal sent or not
 	[] (r1=1&BC1=0)   ->  1-BRK:(BC1'=1)
-				     +BRK:(BC1'=2);
+			     +BRK:(BC1'=2);
 	[] (sv1=1)&(BC1=0|BC1=2) ->  (BC1'=1);
 
      
@@ -240,10 +240,10 @@ module R2
 			
 	[] (r2=0&sel2=4&FC4=1)&(r2_nbr<z_nbr)&(b2=2)&(b1>0&b3>0&sw=2&b4=2)   
             	 -> (IR2_F'=ICB1_F+IDG1+IDG2)&(sel2'=-(r2_nbr-z_nbr));
-	[] (r2=0&!sel2=4&IR2_F>0)&(b1>0&b2=2&b3>0&sw=2&b4=2)  
-					 -> (r2'=5); 
-	[] (r2=0&sel2=4&IR2_F=0)&(b1>0&b2=1&b3>0&sw>0&b4>0)  
-			-> (r2'=6);
+	[] (r2=0&!sel2=4&IR2_F>0)&(b1>0&b2=2&b3>0&sw=2&b4=2)  -> (r2'=5);  
+					
+	[] (r2=0&sel2=4&IR2_F=0)&(b1>0&b2=1&b3>0&sw>0&b4>0)  -> (r2'=6);
+			
           
 
    
@@ -256,10 +256,10 @@ module R2
 			                           +IED:(r2'=2); 
 	[bkp_op2] (r2=5&s4=4&TL2=0)  ->  0.1:(r2'=3)&(TL2'=1) 
 			      		+0.45:(r2'=5)&(TL2'=2)
-				      		+0.45:(r2'=4)&(TL2'=2);
+				      	+0.45:(r2'=4)&(TL2'=2);
 	//Breaker signal sent or not
 	[] (r2=1&BC2=0)   ->  1-COM:(BC2'=1)
-				     +COM:(BC2'=2);
+			      +COM:(BC2'=2);
 	[] (sv2=1)&(BC2=0|BC2=2)  ->  (BC2'=1);
 
 
@@ -297,10 +297,10 @@ module R3
 			
 	[] (r3=0&sel3=4&FC4=1)&(r3_nbr<z_nbr)&(b3=2)&(sw>0)&(b1>0&b2>0&b4=2)  
                   	   ->  (IR3_F'=ICB3_F)&(sel3'=-(r3_nbr-z_nbr));
-	[] (r3=0&!sel3=4&IR3_F>0)&(b1>0&b2>0&b3=2&sw>0&b4=2)  
-					            ->  (r3'=5); 
-	[] (r3=0&sel3=4&IR3_F=0)&((b3=1)&b2>0&b1>0&sw>0&b4>0)  
-					            ->  (r3'=6); 
+	[] (r3=0&!sel3=4&IR3_F>0)&(b1>0&b2>0&b3=2&sw>0&b4=2) ->  (r3'=5);   
+					            
+	[] (r3=0&sel3=4&IR3_F=0)&((b3=1)&b2>0&b1>0&sw>0&b4>0) ->  (r3'=6);  
+					            
 	// Operation mode 
 	[lock1] (r3=5&s4=0)  ->  (r3'=3);
 	[prim_op1] (r3=3&TL3=0)  ->  (r3'=4);
@@ -310,10 +310,10 @@ module R3
 			                           +IED:(r3'=2);
 	[bkp_op3] (r3=5&s4=4&TL3=0) ->  0.1:(r3'=3)&(TL3'=1) 
 			      	       +0.45:(r3'=5)&(TL3'=2)
-				               +0.45:(r3'=4)&(TL3'=2);	
+				       +0.45:(r3'=4)&(TL3'=2);	
 	// Breaker signal sent or not
 	[] (r3=1&BC3=0)   ->  1-COM:(BC3'=1)
-				     +COM:(BC3'=2);
+			     +COM:(BC3'=2);
 	[] (sv3=1)&(BC3=0|BC3=2) ->  (BC3'=1);
 
 
@@ -350,26 +350,26 @@ module R4
 	// Active/Passive mode check
 
 	[] (r4=0&sel4=4&FC4=1)&(r4_nbr>=z_nbr)&(b4=2)&(sw>0)&(b2>0&b1>0&b3>0)    
-                                         -> (IR4_F'=ICB4_F)
-                                            &(sel4'=(r4_nbr-z_nbr));		
-	[] (r4=0&!sel4=4&IR4_F >0)&(b1>0&b2>0&b4=2&sw>0&b3>0)  
-					           -> (r4'=5);
-	[] (r4=0&sel4=4&IR4_F=0)&(b1>0&b2>0&b4=1&sw>0&b3>0)  
-					         -> (r4'=6);
-	[] (r4=0&!sel4=4&IR4_F=0)&(b1>0&b2>0&b4=2&sw>0&b3>0)  
-					       -> (r4'=7);
+                                         -> (IR4_F'=ICB4_F) &(sel4'=(r4_nbr-z_nbr));
+                                           		
+	[] (r4=0&!sel4=4&IR4_F >0)&(b1>0&b2>0&b4=2&sw>0&b3>0)   -> (r4'=5);
+					          
+	[] (r4=0&sel4=4&IR4_F=0)&(b1>0&b2>0&b4=1&sw>0&b3>0)  -> (r4'=6); 
+					        
+	[] (r4=0&!sel4=4&IR4_F=0)&(b1>0&b2>0&b4=2&sw>0&b3>0)  > (r4'=7);
+					       -
 	//Operation mode
  	[prim] (r4=5&TL4=0&WD4=2)  ->  1-IED:(r4'=1)
 			              +IED:(r4'=2);
 	[prim_op] (r4=5&TL4=0&WD4=2)   
 				        ->  1-IED:(r4'=1)
-			           +IED: (r4'=2);
+			           	    +IED: (r4'=2);
 	[prim_op1] (r4=5&TL4=0&WD4=2)   
 				        ->  1-IED:(r4'=1)
-			           +IED: (r4'=2);
+			          	    +IED: (r4'=2);
         // Breaker signal sent or not
 	[] (r4=1&BC4=0)   ->  1-COM:(BC4'=1)
-				     +COM:(BC4'=2);
+			     +COM:(BC4'=2);
             
 
 endmodule
@@ -385,9 +385,9 @@ module Watchdog4
      
 	[] (WD4=0&CT4=0)&((r4=5&sel4=0&r3=5&sel3=1&r2=6)
 			|(r4=5&sel4=0&r2=5&sel2=2&r3=6)
-				|(r4=5&sel4=0&r2=5&sel2=2&r3=5&sel3=1))
-								->  1-WD:(WD4'=2)
-		           +WD:(WD4'=1); 
+			|(r4=5&sel4=0&r2=5&sel2=2&r3=5&sel3=1)) ->  1-WD:(WD4'=2)
+								    +WD:(WD4'=1); 
+		          
 endmodule
 
 
@@ -398,9 +398,9 @@ module Watchdog2
  	//1: Error
 	//2: No Error
      
-	[] (WD2=0&CT2=0)&(r2=5&sel2=2&r3=6& r1=5& sel1=3&r4=7)
-					->  1-WD:(WD2'=2)
-		           +WD:(WD2'=1); 
+	[] (WD2=0&CT2=0)&(r2=5&sel2=2&r3=6& r1=5& sel1=3&r4=7)	->  1-WD:(WD2'=2)
+		          					    +WD:(WD2'=1); 
+				
 endmodule
 
 
@@ -442,7 +442,7 @@ module Sig_Disp4
 	[lock1] (s4=0&CT4=2&r2=6&r3=5)  ->  (s4'=1); 
         [prim_op1]  (r3=3&r2=6&TL4=0&CT4=2)  ->  (s4'=2);
         [TRQ4] (s4=0&WD4=1) ->  1-COM:(s4'=3)
-				       +COM:(s4'=4); 		
+			       +COM:(s4'=4); 		
 	[TRQ4] (s4=2&(r4=2|BC4=2|(BC4=1&b4=3)))  ->  (s4'=3);
 
 
@@ -460,7 +460,7 @@ module Sig_Disp2
         [lock3] (s2=0&CT2=2)  ->  (s2'=1); 
         [prim3] (r1=3&TL2=0&CT2=2)  ->  (s2'=2);
         [TRQ2]  (s2=0&WD2=1)  ->   1-COM:(s2'=3)
-				         +COM:(s2'=4); 		
+				    +COM:(s2'=4); 		
 	[TRQ2] (s2=2&(r2=2|BC2=2|(BC2=1&b2=3)))  ->  (s2'=3);
 
 
@@ -473,7 +473,7 @@ module Sig_RCV2
 	//2: Not received
 
 	[] (rcv2=0&s4=3&IR2_F>0)  ->  1-COM:(rcv2'=1)     
-				             +COM:(rcv2'=2);
+				     +COM:(rcv2'=2);
 
 endmodule
 
@@ -485,7 +485,7 @@ module Sig_RCV1
 	//2: Not received
 
 	[] (rcv1=0&s2=3&IR1_F>0)  ->  1-COM:(rcv1'=1)     
-				             +COM:(rcv1'=2);
+				      +COM:(rcv1'=2);
 
 endmodule
 
@@ -506,9 +506,9 @@ module sup_sv2
  	 t2: bool init false; 
 
 	[] (sv2=0)&(rcv2=2|TL2=1|(r2=2&(b4=2|b4=3)))&(IR2_F>0)  ->  0.5:(t2'=true)&(sv2'=1)
-					                 			                   +0.5:(t2'=false)&(sv2'=0);
+					                 	   +0.5:(t2'=false)&(sv2'=0);
 	[] (sv2=0&BC2=2)&(b4=2|b4=3)  ->  0.5:(t2'=true)&(sv2'=1)
-					                 +0.5:(t2'=false)&(sv2'=0); 
+					  +0.5:(t2'=false)&(sv2'=0); 
      
 endmodule
 
