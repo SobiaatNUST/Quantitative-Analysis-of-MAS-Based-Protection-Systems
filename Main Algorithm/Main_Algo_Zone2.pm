@@ -44,7 +44,7 @@ module DG1
 	// 2: Non-zero/2A current
 
 	[] (DG1=0&IDG1=0&FC2=1)  ->    0.5:(DG1'=1)&(IDG1'=0)
-		    			              +0.5:(DG1'=2)&(IDG1'=2);
+		    		      +0.5:(DG1'=2)&(IDG1'=2);
 
 endmodule
 
@@ -81,9 +81,9 @@ endmodule
 	// 3: Fail to open
 	
         // Breaker can be open or close initially    
-	[] (b1=0)&(sw=1|sw=2)&(BC1=0)&(DG1>0&DG2>0&DG3>0&DG4>0) 
-						               		->  0.5:(b1'=1)&(ICB1_F'=0)
-			                  	   +0.5:(b1'=2)&(ICB1_F'=IMG);	
+	[] (b1=0)&(sw=1|sw=2)&(BC1=0)&(DG1>0&DG2>0&DG3>0&DG4>0) ->  0.5:(b1'=1)&(ICB1_F'=0)
+			                  	                    +0.5:(b1'=2)&(ICB1_F'=IMG);	
+						               		
 	 // Relay has sent command to breaker						                           
 	 [] (b1=2&BC1=1& FC2=1)  ->  1-BRK:(b1'=1)&(isol'=true)&(FC2'=0)
 			            +BRK:(b1'=3)&(isol'=false)&(FC2'=1); 
@@ -105,7 +105,7 @@ module CB2
 	
         // Breaker can be open or close initially 
 	[] (b2=0&BC2=0&DG1>0&DG2>0&DG3>0&DG4>0)&(sw>0)  ->  0.5:(b2'=1)&(ICB2_F'=0)
-		          				           +0.5:(b2'=2)&(ICB2_F'=ICB1_F+IDG1+IDG2); 
+		          				   +0.5:(b2'=2)&(ICB2_F'=ICB1_F+IDG1+IDG2); 
 	 // Relay has sent command to breaker	
 	[] (b2=2&BC2=1&FC2=1)  ->  1-BRK:(b2'=1)&(isol'=true)& (FC2'=0)
 			           +BRK:(b2'=3)&(isol'=false)& (FC2'=1); 
@@ -124,12 +124,11 @@ module CB3
 	// Breaker can be open or close initially 
 	[] (b3=0&BC3=0 )&(sw=1|(sw=2& b1=1))&(DG1>0&DG2>0&DG3>0&DG4>0) 
 						               ->  0.5: (b3'=1)&(ICB3_F'=0)
-			                  +0.5:(b3'=2)&(ICB3_F'=IMG);
-	[] (b3=0&sw=2&b1=2)&(DG1>0&DG2>0&DG3>0&DG4>0) 
-								                 -> (b3'=1)&(ICB3_F'=0);
+			                                           +0.5:(b3'=2)&(ICB3_F'=IMG);
+	[] (b3=0&sw=2&b1=2)&(DG1>0&DG2>0&DG3>0&DG4>0)  -> (b3'=1)&(ICB3_F'=0);
         // Relay has sent command to breaker							                           
 	[] (b3=2&BC3=1&FC2=1)  ->  1-BRK:(b3'=1)&(isol'=true)& (FC2'=0)
-							           +BRK:(b3'=3)&(isol'=false)& (FC2'=1);
+				 +BRK:(b3'=3)&(isol'=false)& (FC2'=1);
 
 
 endmodule
@@ -171,7 +170,7 @@ module R1
    
 	// Operation R1 act as backup relay
 	[] (r1=5&(WD2=1|(CT2=1&(r2=2|b2=3))))&(FC2=1)  ->  1-IED:(r1'=1)&(BC1'=1)
-			          				           +IED: (r1'=2)&(BC1'=2);
+			          			   +IED: (r1'=2)&(BC1'=2);
 	// tb<<tp
 	[] (r1=5&(CT2=2&r2=3))&(FC2=1)  ->  1-IED:(r1'=1)&(BC1'=1)&(False_trip'=true)
 			                    +IED:(r1'=2)&(BC1'=2)&(False_trip'=false);
@@ -213,10 +212,10 @@ module R2
 					                 -> (r2'=5); 
 	// Operation R2 act as backup relay
 	[] (r2=5&(r1=5|r3=5)&WD2=2&(CT2=1|CT2=3))&(FC2=1)  ->  1-IED:(r2'=1)&(BC2'=1)
-			          				               +IED:(r2'=2)&(BC2'=2);
+			          			       +IED:(r2'=2)&(BC2'=2);
         [] (r2=5&(r1=5|r3=5)&WD2=2&(CT2=2))&(FC2=1)  ->  (r2'=3);
 	[] (r2=3)&((r1=2|b1=3)|(r3=2|b3=3))&(FC2=1)->  1-IED:(r2'=1)&(BC2'=1)
-			                 		       +IED:(r2'=2)&(BC2'=2);
+			                 	       +IED:(r2'=2)&(BC2'=2);
 
 endmodule
 
@@ -255,11 +254,11 @@ module R3
 					                 -> (r3'=6); 
 	// Operation R3 act as backup relay
 	[] (r3=5&(WD2=1|(CT2=1&(r2=2|b2=3))))&(FC2=1)  ->  1-IED:(r3'=1)&(BC3'=1)
-			         				           +IED:(r3'=2)&(BC3'=2);
+			         			   +IED:(r3'=2)&(BC3'=2);
 	// tb<<tp
 	[] (r3=5&(CT2=2&r2=3))&(FC2=1)    
 				      ->  1-IED:(r3'=1)&(BC3'=1)&(False_trip'=true)
-			          +IED: (r3'=2)&(BC3'=2)&(False_trip'=false);
+			                  +IED: (r3'=2)&(BC3'=2)&(False_trip'=false);
 	// tb>>tp
 	[] (r3=5&(CT2=3&(r2=2|b2=3)))&(FC2=1)     
 				      ->  (r3'=4)&(risk'=true);
@@ -312,7 +311,7 @@ module Watchdog2
 	[] (WD2=0&CT2=0) &((r2=5&r1=5&(r4=6)&(r3=6|(sw=1&b3=2)))
 			 |(r2=5&r3=5&(r4=6)&(r1=6|(b2=1&b1=2))))
 								->  1-WD:(WD2'=2)
-		            +WD:(WD2'=1); 
+		           					    +WD:(WD2'=1); 
 
 endmodule
 
@@ -325,8 +324,8 @@ module CT2_Chk
  	//3: CTM out of range (CTM>0.4)
   
 	[](CT2=0)&(WD2=2)  ->   1/3:(CT2'=1)
-				       +1/3:(CT2'=2)
-						       +1/3:(CT2'=3);
+				+1/3:(CT2'=2)
+				 +1/3:(CT2'=3);
 
 endmodule
 
