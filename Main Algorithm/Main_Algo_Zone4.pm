@@ -43,7 +43,7 @@ module DG1
 	// 2: Non-zero/2A current
 
 	[] (DG1=0&IDG1=0&FC4=1)  ->    0.5:(DG1'=1)&(IDG1'=0)
-		    			              +0.5:(DG1'=2)&(IDG1'=2);
+		    		      +0.5:(DG1'=2)&(IDG1'=2);
 
 endmodule
 
@@ -81,10 +81,10 @@ module CB1
 
 	// Breaker can be open or close initially    
 	 [] (b1=0&sw>0&BC1=0)&(DG1>0&DG2>0&DG3>0&DG4>0)  ->  0.5:(b1'=1)&(ICB1_F'=0)
-			                   		            +0.5:(b1'=2)&(ICB1_F'=IMG);
+			                   		    +0.5:(b1'=2)&(ICB1_F'=IMG);
 	// Relay has sent command to breaker	 
 	[] (b1=2&BC1=1&FC4=1)  ->  1-BRK:(b1'=1)&(isol'=true)
-							           +BRK:(b1'=3)&(isol'=false);
+				   +BRK:(b1'=3)&(isol'=false);
 
 
 endmodule
@@ -100,7 +100,7 @@ module CB2
 
 	// Breaker can be open or close initially  
 	[] (b2=0&BC2=0)&(DG1>0&DG2>0&DG3>0&DG4>0)&(sw>0)  ->  0.5:(b2'=1)&(ICB2_F'=0)
-			          				             +0.5:(b2'=2)&(ICB2_F'=ICB1_F+IDG1+IDG2); 
+			          			      +0.5:(b2'=2)&(ICB2_F'=ICB1_F+IDG1+IDG2); 
 	// Relay has sent command to breaker	
 	[] (b2=2&BC2=1&FC4=1)  ->  1-BRK:(b2'=1)&(isol'=true)
 			           +BRK:(b2'=3)&(isol'=false);
@@ -119,12 +119,12 @@ module CB3
 
 	// Breaker can be open or close initially  
 	[] (b3=0&BC3=0)&(sw=1|(sw=2& b1=1))&(DG1>0&DG2>0&DG3>0&DG4>0)  ->  0.5:(b3'=1)&(ICB3_F'=0)
-			                   			                           +0.5:(b3'=2)&(ICB3_F'=IMG);
+			                   			           +0.5:(b3'=2)&(ICB3_F'=IMG);
 	[] (b3=0&sw=2&b1=2)&(DG1>0&DG2>0&DG3>0&DG4>0)  ->  (b3'=1)&(ICB3_F'=0);
 		
      // Relay has sent command to breaker							                           
 	[] (b3=2&BC3=1&FC4=1)  ->  1-BRK:(b3'=1)&(isol'=true)
-							           +BRK:(b3'=3)&(isol'=false);
+				  +BRK:(b3'=3)&(isol'=false);
 
 endmodule
 
@@ -141,7 +141,7 @@ endmodule
 			                                     +0.5:(b4'=2)&(ICB4_F'=ICB3_F+IDG3+IDG4+ICB1_F+IDG1+IDG2);					                           
 	// Relay has sent command to breaker	       
 	[] (b4=2&BC4=1&FC4=1)  ->  1-BRK:(b4'=1)&(isol'=true)
-							           +BRK:(b4'=3)&(isol'=false);
+				   +BRK:(b4'=3)&(isol'=false);
 
 endmodule
 
@@ -178,7 +178,7 @@ module R1
 					    -> (r1'=6); 
         // Operation R1 act as backup relay
 	[] (r1=5&(WD2=1|(CT2=1&(r2=2|b2=3))))&(FC4=1)  ->  1-IED:(r1'=1)&(BC1'=1)
-			          				           +IED:(r1'=2)&(BC1'=2);
+			          			   +IED:(r1'=2)&(BC1'=2);
 	// tb<<tp
 	[] (r1=5&(CT2=2&r2=3))&(FC4=1)  ->  1-IED:(r1'=1)&(BC1'=1)&(False_trip'=true)
 			                    +IED:(r1'=2)&(BC1'=2)&(False_trip'=false);
@@ -322,7 +322,7 @@ module R4
 			                                   +IED: (r4'=2)&(BC4'=2);
 	[] (r4=3)&(r2=2|b2=3)&(FC4=1)&(((r1=6|sel1=3)&(r3=6|(sel3=1&r3=0)))|(sw=1))
 					                 ->  1-IED:(r4'=1)&(BC4'=1)
-			                    +IED: (r4'=2)&(BC4'=2);
+			                                     +IED: (r4'=2)&(BC4'=2);
 	[] (r4=3)&(r3=2|b3=3)&(FC4=1)&(((r2=6|(sel2=2&r2=0))&(r1=6|sel1=3))|(sw=1)) 
 			                 ->  1-IED:(r4'=1)&(BC4'=1)
 			                     +IED:(r4'=2)&(BC4'=2);
@@ -339,12 +339,12 @@ module Watchdog4
 	//2: No Error
     
 	[] (WD4=0&CT4=0)&((r4=5&r3=5&(r2=7|r2=6|(b2=2&(sw=1|b4=1)))
-				&(r1=5|r1=6|(b1=2&(sw=1|b4=1|b2=1))))
+			&(r1=5|r1=6|(b1=2&(sw=1|b4=1|b2=1))))
 			|(r4=5&r2=5 &(r3=6|(b3=2&b4=1))
-				&(r1=5|r1=6|(b1=2&(sw=1|b4=1|b2=1)))) 
-				|(r4=5&r2=5&r3=5&(r1=5|r1=6|(b1=2&(sw=1|b4=1|b2=1)))))
+			&(r1=5|r1=6|(b1=2&(sw=1|b4=1|b2=1)))) 
+			|(r4=5&r2=5&r3=5&(r1=5|r1=6|(b1=2&(sw=1|b4=1|b2=1)))))
 								->  1-WD:(WD4'=2)
-		           +WD:(WD4'=1); 
+		          					    +WD:(WD4'=1); 
 
 endmodule
 
@@ -358,7 +358,7 @@ module Watchdog2
     
 	[] (WD2=0&CT2=0)&(r2=5&r1=5&r4=7&(r3=6|(b3=2&b4=1)))
 					->  1-WD:(WD2'=2)
-		           +WD:(WD2'=1); 
+		          		   +WD:(WD2'=1); 
 
 endmodule
 
@@ -383,8 +383,8 @@ module CT2_Chk
 	// 2: CTM out of range (CTM<0.3)
  	//3: CTM out of range (CTM>0.4)
 	[](CT2=0)&(WD2=2)  ->   1/3:(CT2'=1)
-			       +1/3:(CT2'=2)
-                               +1/3:(CT2'=3);
+			        +1/3:(CT2'=2)
+                                +1/3:(CT2'=3);
 
 endmodule
    
@@ -393,7 +393,7 @@ endmodule
 // LABELS FOR PROPERTIES VERIFICATION
 
 label "Cond1"= FC4=1 &(r4=5&r3=5&(r2=7|r2=6|(b2=2&(sw=1|b4=1)))
-				&(r1=5|r1=6|(b1=2&(sw=1|b4=1|b2=1))));
+		    &(r1=5|r1=6|(b1=2&(sw=1|b4=1|b2=1))));
 label "Succ1"= (CT4=1|CT4=3)&((r4=1 &b4=1 & isol=true)
 		  |(r3=1&b3=1& isol=true))
 		  |((CT4=2& r3=2& r4=1&b4=1)
