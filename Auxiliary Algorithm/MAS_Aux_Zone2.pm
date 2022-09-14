@@ -44,7 +44,7 @@ module DG1
 	// 2: Non-zero/2A current
 
 	[] (DG1=0&IDG1=0&FC2=1)  ->    0.5: (DG1'=1)&(IDG1'=0)
-		    			              +0.5:(DG1'=2)&(IDG1'=2);
+		    		      +0.5:(DG1'=2)&(IDG1'=2);
 
 endmodule
 
@@ -80,10 +80,10 @@ module CB1
 	
         // Breaker can be open or close initially 
 	[] (b1=0&BC1=0)&(sw=1|sw=2)&(DG1>0&DG2>0&DG3>0&DG4>0)  ->  0.5:(b1'=1)&(ICB1_F'=0)
-			                   				                  +0.5:(b1'=2)&(ICB1_F'=IMG);
+			                   			  +0.5:(b1'=2)&(ICB1_F'=IMG);
 	 // Relay has sent command to breaker							                           
         [] (b1=2&BC1=1)  ->  1-BRK:(b1'=1)&(isol'=true)
-							    +BRK:(b1'=3)&(isol'=false);
+			    +BRK:(b1'=3)&(isol'=false);
 			                   
 endmodule
 module CB4 = CB1[b1=b4,BC1=BC4,ICB1_F=ICB4_F,IMG=IDG5] endmodule 
@@ -102,11 +102,11 @@ module CB3
 	
         // Breaker can be open or close initially 
 	[] (b3=0&BC3=0)&((sw=1|sw=2)&b1=1)&(DG1>0&DG2>0&DG3>0&DG4>0)  ->  0.5: (b3'=1)& (ICB3_F'=0)
-			                   		                         +0.5:(b3'=2)& (ICB3_F'=IMG);
+			                   		                 +0.5:(b3'=2)& (ICB3_F'=IMG);
 	[] (b3=0&sw=2&b1=2)&(DG1>0&DG2>0&DG3>0&DG4>0)  ->  (b3'=1)& (ICB3_F'=0);
         // Relay has sent command to breaker							                           
  	[] (b3=2&BC3=1) ->  1-BRK:(b3'=1)&(isol'=true)
-							   +BRK:(b3'=3)&(isol'=false);
+			   +BRK:(b3'=3)&(isol'=false);
 			                   
 endmodule
 
@@ -120,9 +120,10 @@ module CB2
 	
         // Breaker can be open or close initially 
 		
-	[] (b2=0&BC2=0)&(DG1>0&DG2>0&DG3>0&DG4>0)&(b1>0&b3>0&sw>0&b4>0)
-										                                    ->  0.5: (b2'=1)&(ICB2_F'=0)
-			           	                       +0.5:(b2'=2)&(ICB2_F'=ICB1_F+IDG1+IDG2); 
+	[] (b2=0&BC2=0)&(DG1>0&DG2>0&DG3>0&DG4>0)&(b1>0&b3>0&sw>0&b4>0)     ->  0.5: (b2'=1)&(ICB2_F'=0)
+									        +0.5:(b2'=2)&(ICB2_F'=ICB1_F+IDG1+IDG2); 
+										                                
+			           	                      			
 	[] (b2=2&BC2=1)  ->   1-BRK:(b2'=1)&(isol'=true)
 			     +BRK:(b2'=3)&(isol'=false);  
 
@@ -173,10 +174,10 @@ module R1
 			                           +IED: (r1'=2);
 	[bkp_op1] (r1=5&s2=4&TL1=0)  ->     0.1:(r1'=3)&(TL1'=1) 
 			    		   +0.45: (r1'=5)&(TL1'=2)
-				      		   +0.45: (r1'=4)&(TL1'=2);
+				      	   +0.45: (r1'=4)&(TL1'=2);
 	// Breaker signal sent or not
 	[] (r1=1&BC1=0)   ->  1-COM:(BC1'=1)
-				     +COM:(BC1'=2);
+			     +COM:(BC1'=2);
 	[] (sv1=1)&(BC1=0|BC1=2)  ->  (BC1'=1);
 
 
@@ -225,7 +226,7 @@ module R2
 			              +IED:(r2'=2);
 	// Breaker signal sent or not
 	[] (r2=1&BC2=0)   ->  1-COM:(BC2'=1)
-				     +COM:(BC2'=2);
+			     +COM:(BC2'=2);
 
 
 endmodule
@@ -273,10 +274,10 @@ module R3
 			                             +IED:(r3'=2); 
 	[bkp_op3] (r3=5&s2=4&TL3=0)  ->  0.1:(r3'=3)&(TL3'=1) 
 			      		+0.45:(r3'=5)&(TL3'=2)
-				      		+0.45:(r3'=4)&(TL3'=2);
+				      	+0.45:(r3'=4)&(TL3'=2);
 	// Breaker signal sent or not
 	[] (r3=1&BC3=0)   ->  1-COM:(BC3'=1)
-				     +COM:(BC3'=2);
+			     +COM:(BC3'=2);
 	[] (sv3=1)&(BC3=0|BC3=2)  ->  (BC3'=1);
 
 
@@ -312,10 +313,10 @@ endmodule
 	// Active/Passive mode check
 	[] (r4=0&sel4=4&FC2=1)&(r4_nbr>z_nbr)&(b4=2&sw=2)&(b2>0&b1>0&b3>0)  
                      	      ->  (IR4_F'=ICB4_F)&(sel4'=(r4_nbr-z_nbr));
-	[] (r4=0&!sel4=4&IR4_F>0)&(b1>0&b2>0&b4=2&sw>0&b3>0)  
-					            -> (r4'=5); 
-	[] (r4=0&sel4=2&IR4_F=0)&(b1>0&b2>0&b4=2&sw>0&b3>0)  
-					            -> (r4'=6);
+	[] (r4=0&!sel4=4&IR4_F>0)&(b1>0&b2>0&b4=2&sw>0&b3>0)   -> (r4'=5); 
+					           
+	[] (r4=0&sel4=2&IR4_F=0)&(b1>0&b2>0&b4=2&sw>0&b3>0)   -> (r4'=6);
+					           
 	// Operation mode       
 	[lok3] (r4=5&s2=0&CT2=2)  ->  (r4'=3);
 	[prim3] (r4=3&TL4=0)  ->  (r4'=4);
@@ -323,10 +324,10 @@ endmodule
 			                            +IED:(r4'=2);
 	[bkp_op4] (r4=5&s2=4&TL4=0)  ->  0.1:(r4'=3)&(TL4'=1) 
 			    		+0.45:(r4'=5)&(TL4'=2)
-				      		+0.45:(r4'=4)&(TL4'=2);
+				      	+0.45:(r4'=4)&(TL4'=2);
 	// Breaker signal sent or not
 	[] (r4=1&BC4=0)  ->   1-COM:(BC4'=1)
-				      +COM:(BC4'=2);
+			     +COM:(BC4'=2);
 	[] (sv4=1)&(BC4=0|BC4=2)  ->  (BC4'=1);
 
 
@@ -342,7 +343,7 @@ module Watchdog2
 	[] (WD2=0&CT2=0)&((r2=5&sel2=0&r3=6& r1=5& sel1=1&(r4=6))
 		         |(r2=5&sel2=0&r1=6&r3=5& sel3=1&(r4=6)))
 					 		->    1-WD:(WD2'=2)
-		           		     +WD:(WD2'=1); 
+		           		   		      +WD:(WD2'=1); 
 
 
 endmodule
@@ -355,7 +356,7 @@ module CT2_Chk
 	//2: CTM out of range
 
 	[](CT2=0&WD2=2)  ->  0.5:(CT2'=1)
-				    +0.5:(CT2'=2);			    	    
+			    +0.5:(CT2'=2);			    	    
 
 endmodule
 
@@ -377,7 +378,7 @@ module Sig_Disp2
 	[lok3] (s2=0&r4=5&r2=5&CT2=2)  ->  (s2'=1); 
 	[prim3](s2=1&r4=3&TL2=0&CT2=2) ->  (s2'=2);
 	[TRQ2] (s2=0&WD2=1)  ->  1-COM:(s2'=3)
-				        +COM:(s2'=4);
+				 +COM:(s2'=4);
 	[TRQ2] (s2=2&(r2=2|BC2=2|(BC2=1&b2=3))) ->  (s2'=3);
 
 
@@ -394,7 +395,7 @@ module Sig_RCV1
 	//2: Not received
 
 	[] (rcv1=0&s2=3&IR1_F>0) ->  1-COM:(rcv1'=1)  
-				    	    +COM:(rcv1'=2);
+				     +COM:(rcv1'=2);
 
 endmodule
 
@@ -416,9 +417,9 @@ module sup_sv1
  	 t1: bool init false; 
 
 	[] (sv1=0)&(rcv1=2|TL1=1|(r1=2&(b2=2|b2=3)))&(IR1_F>0)  ->  0.5: (t1'=true)&(sv1'=1)
-					                                            +0.5:(t1'=false)&(sv1'=0);
+					                            +0.5:(t1'=false)&(sv1'=0);
 	[] (sv1=0)&(BC1=2)&(b2=2|b2=3)  ->  0.5: (t1'=true)&(sv1'=1)
-					                   +0.5:(t1'=false)&(sv1'=0);      
+					   +0.5:(t1'=false)&(sv1'=0);      
 
 endmodule
 
