@@ -49,7 +49,7 @@ module DG1
 	// 2: Non-zero/2A current
 
 	[] (DG1=0&IDG1=0&FC1=1)  ->    0.5: (DG1'=1)&(IDG1'=0)
-		    			              +0.5:(DG1'=2)&(IDG1'=2);
+		    		      +0.5:(DG1'=2)&(IDG1'=2);
 
 endmodule
 
@@ -70,7 +70,7 @@ module SW
 
 	ISW_F:[0..12];
 
-	[] (sw=0&DG1>0&DG2>0&DG3>0&DG4>0) ->  0.5: (sw'=1)&(ISW_F'=0)
+	[] (sw=0&DG1>0&DG2>0&DG3>0&DG4>0) ->   0.5: (sw'=1)&(ISW_F'=0)
 			                      +0.5:(sw'=2)&(ISW_F'=ICB3_F+IDG3+IDG4+ICB4_F);	
 
 
@@ -87,9 +87,8 @@ module CB1
 	// 3: Fail to open
 	
         // Breaker can be open or close initially    
-	[] (b1=0)&(sw=1|sw=2)&(BC1=0)&(DG1>0&DG2>0&DG3>0&DG4>0) 
-						               		->  0.5:(b1'=1)&(ICB1_F'=0)
-			                  	   +0.5:(b1'=2)&(ICB1_F'=IMG);	
+	[] (b1=0)&(sw=1|sw=2)&(BC1=0)&(DG1>0&DG2>0&DG3>0&DG4>0)  ->  0.5:(b1'=1)&(ICB1_F'=0)
+			                  	   		    +0.5:(b1'=2)&(ICB1_F'=IMG);	
 	 // Relay has sent command to breaker						                           
 	 [] (b1=2&BC1=1& FC1=1)  ->  1-BRK:(b1'=1)&(isol'=true)&(FC1'=0)
 			            +BRK:(b1'=3)&(isol'=false)&(FC1'=1); 
@@ -111,7 +110,7 @@ module CB2
 
 	[] (b2=0&BC2=0)&(DG1>0&DG2>0&DG3>0&DG4>0)&(b1>0&b3>0&sw>0)  
 					          ->  0.5:(b2'=1)&(ICB2_F'=0)
-			             +0.5:(b2'=2)&(ICB2_F'=ISW_F); 
+					     	     +0.5:(b2'=2)&(ICB2_F'=ISW_F); 
 	// Relay has sent command to breaker	
 	[] (b2=2&BC2=1&FC1=1)  ->    1-BRK:(b2'=1)&(isol'=true)&(FC1'=0)
 			            +BRK:(b2'=3)&(isol'=false)&(FC1'=1); 
@@ -129,13 +128,13 @@ module CB3
 
 	[] (b3=0)&((sw=1&b1=2)|b1=1)&(BC3=0)&(DG1>0&DG2>0&DG3>0&DG4>0) 
 						               ->   0.5:(b3'=1)&(ICB3_F'=0)
-			                   +0.5:(b3'=2)&(ICB3_F'=IMG);
+			                  			   +0.5:(b3'=2)&(ICB3_F'=IMG);
 	// When both the SW and CB1 are close
-	[] (b3=0)&(sw=2&b1=2)&(DG1>0&DG2>0&DG3>0&DG4>0) 
-								               ->  (b3'=1)&(ICB3_F'=0);
+	[] (b3=0)&(sw=2&b1=2)&(DG1>0&DG2>0&DG3>0&DG4>0)  ->  (b3'=1)&(ICB3_F'=0);
+								              
 	// Relay has sent command to breaker							                           
 	[] (b3=2&BC3=1&FC1=1)  ->  1-BRK:(b3'=1)&(isol'=true)&(FC1'=0)
-							           +BRK:(b3'=3)&(isol'=false)&(FC1'=1);
+				   +BRK:(b3'=3)&(isol'=false)&(FC1'=1);			           
 
 endmodule
 
@@ -215,7 +214,7 @@ module R2
 					                 -> (r2'=6);   
 	// Operation R2 act as backup relay
 	[] (r2=5 &(FC1=1)&(WD1=1|(WD1=2&CT1=1&(r1=2|b1=3))))  ->  1-IED:(r2'=1)&(BC2'=1)
-			          				                  +IED: (r2'=2)&(BC2'=2);
+			          				  +IED: (r2'=2)&(BC2'=2);
         // tb<<tp
 	[] (r2=5&(CT1=2&r1=3))&(FC1=1)  ->  1-IED:(r2'=1)&(BC2'=1)&(False_trip'=true)
 			         	   +IED:(r2'=2)&(BC2'=2)&(False_trip'=false);
@@ -266,7 +265,7 @@ module R3
  	 // Operation R3 act as backup relay
 
 	[] (r3=5&(WD2=1|(CT2=1&(r2=2|b2=3))))&(FC1=1)  ->  1-IED:(r3'=1)&(BC3'=1)
-			         				           +IED:(r3'=2)&(BC3'=2);
+			         			   +IED:(r3'=2)&(BC3'=2);
 	[] (r3=5&(CT2=2&r2=3))&(FC1=1)  ->  1-IED:(r3'=1)&(BC3'=1)&(False_trip'=true)
 			                    +IED:(r3'=2)&(BC3'=2)&(False_trip'=false);
 	[] (r3=5&(CT2=3&(r2=2|b2=3)))&(FC1=1)  ->  (r3'=4)&(risk'=true);
@@ -323,7 +322,7 @@ module Watchdog1
 	//2: No Error
 	[] (WD1=0&CT1=0)&(r1=5&r2=5&(r3=6|(sw=1|b2=1))&(r4=6|(sw=1|b2=1))) 
 				          ->  1-WD:(WD1'=2)
-			              +WD:(WD1'=1);
+			              	      +WD:(WD1'=1);
 endmodule
 
 module Watchdog2
@@ -348,7 +347,7 @@ module CT1_Chk
 
    	[](CT1=0&WD1=2)  -> 1/3:(CT1'=1)
 			   +1/3:(CT1'=2)
-						   +1/3:(CT1'=3);
+			   +1/3:(CT1'=3);
 
 endmodule
 
@@ -361,8 +360,8 @@ module CT2_Chk
  	//3: CTM out of range (CTM>0.4)
 
    	[](CT2=0&WD2=2)  ->   1/3:(CT2'=1)
-				     +1/3:(CT2'=2)
-						     +1/3:(CT2'=3);	    	    
+			      +1/3:(CT2'=2)
+			     +1/3:(CT2'=3);	    	    
 endmodule
 
 
@@ -387,8 +386,8 @@ label "Fail1"  = (WD1=2&(((b1=3&b2=3)|(r1=1&b1=3&r2=2))
 		      |(r1=2& b2=3)|(r1=2&r2=2)))
 		      |(WD1=1& (r2=2|(r2=1&b2=3)));
 label "Fail2"=(WD2=2 & (((b2=3&b3=3)|(r2=1& b2=3&r3=2))
-	         	|(r2=2& b3=3)|(r2=2&r3=2)))
-			|(WD2=1& (r3=2|(r3=1&b3=3)));
+	             |(r2=2& b3=3)|(r2=2&r3=2)))
+		     |(WD2=1& (r3=2|(r3=1&b3=3)));
 
 label "False_trip"=(CT1=2&r1=3&r2=1&b2=1& False_trip=true)
                    |(CT2=2&r2=3&r3=1&b3=1& False_trip=true);
