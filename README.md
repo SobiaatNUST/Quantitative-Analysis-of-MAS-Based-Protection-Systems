@@ -82,26 +82,25 @@ For more information, please feel free to contact sashraf.dphd19seecs@seecs.edu.
        # Probabilistic Analysis Results 
 Table below shows the quantitive verification results obtained using Traditional Algorithm.
         
-        <table>
-    <tr>
+ <table>
+       <tr>
        <th colspan ="1"> </th>
         <th colspan ="4"> Traditional Algorithm </th>
- 
-    </tr>
-  <tr>
+   </tr>
+      <tr>
         <td>Fault Zones</td>
      <td>Isolation Success </td>
         <td>Isolation Failure</td>
         <td>False Trip</td>
         <td>Risk</td>
-    </tr>
-    <tr>
+   </tr>
+      <tr>
         <td>Z1</td>
       <td>0.6595 </td>
         <td>0.0406</td>
         <td>0.2430</td>
         <td>0.0569</td>
-    </tr>
+   </tr>
     
      <tr>
         <td>Z2</td>
@@ -109,7 +108,7 @@ Table below shows the quantitive verification results obtained using Traditional
         <td>0.0406</td>
         <td>0.2430</td>
         <td>0.0569</td>
-    </tr>
+   </tr>
     
        <tr>
         <td>Z3</td>
@@ -117,14 +116,13 @@ Table below shows the quantitive verification results obtained using Traditional
         <td>0.0406</td>
         <td>0.2430</td>
         <td>0.0569</td>
-    </tr>
+   </tr>
     
        <tr>
         <td>Z4</td>
-      <td>0.6591 </td>
+       <td>0.6591 </td>
         <td>0.0407</td>
         <td>0.2430</td>
         <td>0.0569</td>
-    </tr>
-    
-    </table>
+  </tr>
+ </table>
