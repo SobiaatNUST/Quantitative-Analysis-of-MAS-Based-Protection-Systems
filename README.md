@@ -70,15 +70,7 @@ Table below shows the quantitive verification results obtained using Auxiliary a
         <td>0.0034</td>
     </tr>
 </table>
-
-For more information, please feel free to contact sashraf.dphd19seecs@seecs.edu.pk
-
-[1]  B. Fani, E. Abbaspour, and A. Karami-Horestani
-    “A fault-clearing algorithm supporting the mas-based protection schemes,”
-    International Journal of Electrical Power & Energy Systems, vol. 103, pp. 257–266,2018.
-    
-    
-        
+     
   # Probabilistic Analysis Results 
 Table below shows the quantitive verification results obtained using Traditional Algorithm.
         
@@ -123,3 +115,8 @@ Table below shows the quantitive verification results obtained using Traditional
         <td>0.0569</td>
   </tr>
  </table>
+ For more information, please feel free to contact sashraf.dphd19seecs@seecs.edu.pk
+
+[1]  B. Fani, E. Abbaspour, and A. Karami-Horestani
+    “A fault-clearing algorithm supporting the mas-based protection schemes,”
+    International Journal of Electrical Power & Energy Systems, vol. 103, pp. 257–266,2018.
