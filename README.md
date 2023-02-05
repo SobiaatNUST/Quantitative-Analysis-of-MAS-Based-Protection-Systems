@@ -79,7 +79,7 @@ For more information, please feel free to contact sashraf.dphd19seecs@seecs.edu.
     
     
         
-       # Probabilistic Analysis Results 
+  # Probabilistic Analysis Results 
 Table below shows the quantitive verification results obtained using Traditional Algorithm.
         
  <table>
