@@ -115,7 +115,6 @@ Table below shows the quantitive verification results obtained using Traditional
         <td>0.2430</td>
         <td>0.0569</td>
    </tr>
-    
      <tr>
         <td>Z4</td>
        <td>0.6591 </td>
