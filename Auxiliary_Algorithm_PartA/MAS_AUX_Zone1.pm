@@ -1,6 +1,7 @@
 // Auxiliary Algorithm Part A 
 // Zone Z1
 
+
 dtmc
 
 //CONSTANTS
