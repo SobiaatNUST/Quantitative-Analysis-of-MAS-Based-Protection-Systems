@@ -1,0 +1,12 @@
+// Probability of Isolation Failure for fault in Zone 1
+P=? [ F ("Fail1"|"Fail2") ]
+
+// Probability of Auxiliary Algorithm called
+P=? [ F ((CTM2=2|CTM2=3|CTM1=2|CTM1=3)|(WD2=1|WD1=1)) ]
+
+P=? [ ((F "risk1"))|((F "risk2")) ]
+
+P=? [ F ("False_Trip1"|"False_Trip2") ]
+
+P=? [ F ("Succ1"|"Succ2") ]
+
