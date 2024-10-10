@@ -12,6 +12,8 @@
  The results show that the auxiliary algorithm is more reliable and safer than the traditional algorithm. 
  </p>
  
- &raquo; **Complete Project Report and Codes can be accessed [here](https://github.com/SobiaatNUST/Quantitative-Analysis-of-MAS-Based-Protection-Systems)**
+ &raquo; **Complete Project Report can be accessed [here](https://github.com/SobiaatNUST/Quantitative-Analysis-of-MAS-Based-Protection-Systems/blob/main/Report.pdf)
+ 
+ &raquo; **Complete Project Codes can be accessed [here](https://github.com/SobiaatNUST/Quantitative-Analysis-of-MAS-Based-Protection-Systems/tree/main/Codes)
  
  &raquo; **For more information, please feel free to contact: sashraf.dphd19seecs@seecs.edu.pk**
