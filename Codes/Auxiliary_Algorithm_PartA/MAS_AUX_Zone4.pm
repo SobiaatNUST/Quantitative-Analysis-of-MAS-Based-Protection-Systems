@@ -163,8 +163,8 @@ module R1
 	[] (r1=0&sel1=4&IR1_F=0)&((b1=1)&b2>0&b3>0&sw>0&b4>0)  
 					         -> (r1'=6); 
 	// Operation mode 
-	[lock3] (r1=5&s2=0)  ->  (r1'=3); //lok //prim
-	[prim3] (r1=3&TL1=0)  ->  (r1'=4);
+	[lock3] (r1=5&s2=0)  ->  (r1'=3); 
+	[opr3] (r1=3&TL1=0)  ->  (r1'=4);
 	[bkp_op1] ((r1=5|r1=4)&(TRQ_R1=1|TL1=2))  ->  1-IED:(r1'=1)
 			                            +IED:(r1'=2); 
 	[bkp_op1] (r1=5&s2=4&TL1=0)  ->  0.1:(r1'=3)&(TL1'=1)
@@ -211,9 +211,9 @@ module R2
 			-> (r2'=6);
 	// Operation mode 
 	[lock] (r2=5&s4=0)  ->  (r2'=3);
-	[prim_op] (r2=3&TL2=0)  ->  (r2'=4);
-	[lok] (r2=5&s4=0)  ->  (r2'=3);
-	[prim] (r2=3&TL2=0)  ->  (r2'=4);     
+	[opr1] (r2=3&TL2=0)  ->  (r2'=4);
+	[lock2] (r2=5&s4=0)  ->  (r2'=3);
+	[opr] (r2=3&TL2=0)  ->  (r2'=4);     
 	[] ((r2=5|r2=4)&(TRQ_R2=1|TL2=2))  ->  1-IED:(r2'=1)
 			                           +IED:(r2'=2); 
 	[] (r2=5&s4=4&TL2=0)  ->  0.1:(r2'=3)&(TL2'=1) 
@@ -257,9 +257,9 @@ module R3
 					            ->  (r3'=6); 
 	// Operation mode 
 	[lock1] (r3=5&s4=0)  ->  (r3'=3);
-	[prim_op1] (r3=3&TL3=0)  ->  (r3'=4);
-	[lok] (r3=5&s4=0) -> (r3'=3);
-	[prim] (r3=3&TL3=0)  ->  (r3'=4);
+	[opr2] (r3=3&TL3=0)  ->  (r3'=4);
+	[lock2] (r3=5&s4=0) -> (r3'=3);
+	[opr] (r3=3&TL3=0)  ->  (r3'=4);
 	[bkp_op3] ((r3=5|r3=4)&(TRQ_R3=1|TL3=2)) ->  1-IED:(r3'=1)
 			                           +IED:(r3'=2);
 	[bkp_op3] (r3=5&s4=4&TL3=0) ->  0.1:(r3'=3)&(TL3'=1) 
@@ -304,12 +304,12 @@ module R4
 	[] (r4=0&!sel4=4&IR4_F=0)&(b1>0&b2>0&b4=2&sw>0&b3>0)  
 					       -> (r4'=7);
 	//Operation mode
- 	[prim] (r4=5&TL4=0&WD4=2)  ->  1-IED:(r4'=1)
+ 	[opr] (r4=5&TL4=0&WD4=2)  ->  1-IED:(r4'=1)
 			              +IED:(r4'=2);
-	[prim_op] (r4=5&TL4=0&WD4=2)   
+	[opr1] (r4=5&TL4=0&WD4=2)   
 				        ->  1-IED:(r4'=1)
 			           +IED: (r4'=2);
-	[prim_op1] (r4=5&TL4=0&WD4=2)   
+	[opr2] (r4=5&TL4=0&WD4=2)   
 				        ->  1-IED:(r4'=1)
 			           +IED: (r4'=2);
         // Breaker signal sent or not
@@ -373,15 +373,15 @@ module Sig_Disp4
 	//3: TRQ1 sent
 	//4: TRQ1 not sent
 
-	[lok] (s4=0&(CTM4=2|CTM4=3)&r2=5&r3=5) -> (s4'=1); 
-        [prim](r2=3&r3=3&TL4=0&(CTM4=2|CTM4=3)) ->  (s4'=2);
+	[lock2] (s4=0&(CTM4=2|CTM4=3)&r2=5&r3=5) -> (s4'=1); 
+        [opr](r2=3&r3=3&TL4=0&(CTM4=2|CTM4=3)) ->  (s4'=2);
         [lock](s4=0&(CTM4=2|CTM4=3)&r2=5&r3=6) ->  (s4'=1); 
-        [prim_op](r2=3&r3=6&TL4=0&(CTM4=2|CTM4=3)) ->  (s4'=2);
+        [opr1](r2=3&r3=6&TL4=0&(CTM4=2|CTM4=3)) ->  (s4'=2);
 	[lock1] (s4=0&(CTM4=2|CTM4=3)&r2=6&r3=5)  ->  (s4'=1); 
-        [prim_op1]  (r3=3&r2=6&TL4=0&(CTM4=2|CTM4=3))  ->  (s4'=2);
-        [] (s4=0&WD4=1) ->  1-COM:(s4'=3)
+        [opr2]  (r3=3&r2=6&TL4=0&(CTM4=2|CTM4=3))  ->  (s4'=2);
+        [req4] (s4=0&WD4=1) ->  1-COM:(s4'=3)
 				    +COM:(s4'=4); 		
-	[] (s4=2&(r4=2|BC4=2|(BC4=1&b4=3)))  ->  (s4'=3);
+	[req4] (s4=2&(r4=2|BC4=2|(BC4=1&b4=3)))  ->  (s4'=3);
 
 endmodule
 
@@ -395,10 +395,10 @@ module Sig_Disp2
 	//4: TRQ1 not sent
 
         [lock3] (s2=0&(CT2=2|CT2=3))  ->  (s2'=1); 
-        [prim3] (r1=3&TL2=0&(CT2=2|CT2=3))  ->  (s2'=2);
-        []  (s2=0&WD2=1)  ->   1-COM:(s2'=3)
+        [opr3] (r1=3&TL2=0&(CT2=2|CT2=3))  ->  (s2'=2);
+        [req2]  (s2=0&WD2=1)  ->   1-COM:(s2'=3)
 				       +COM:(s2'=4); 		
-	[] (s2=2&(r2=2|BC2=2|(BC2=1&b2=3)))  ->  (s2'=3);
+	[req2] (s2=2&(r2=2|BC2=2|(BC2=1&b2=3)))  ->  (s2'=3);
 
 
 endmodule
