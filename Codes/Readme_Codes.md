@@ -41,14 +41,13 @@ This command parses the model and property, evaluates the properties, and saves 
 
 ## 4. Raw Results and Post-Processing
 
-Each model execution produces raw probabilistic results per zone and algorithm. To obtain the final comparison results presented in the paper, further aggregation and computation (e.g., subtraction, percentage difference) is required. These are detailed in the file `Compute_Final_Results.py`.
-
+Each model execution produces raw probabilistic results per zone and algorithm. To obtain the final comparison results presented in the paper, further aggregation and computation (e.g., subtraction, percentage difference) is required. These are detailed in the file: [`Compute_Final_Results.py`](./Compute_Final_Results.py)
 ## 5. Automated Batch Scripts
 
 To automate the analysis for each algorithm, we provide:
 
-- **Linux Bash Script**: `Linux_automated_script.sh`
-- **Windows Batch Script**: `Windows_automated_script.bat`
+- - **Linux Bash Script**: [`Linux_automated_script.sh`](./scripts/Linux_automated_script.sh)
+- **Windows Batch Script**: [`Windows_automated_script.bat`](./scripts/Windows_automated_script.bat)
 
 Each script executes all model-property pairs for the four zones under an algorithm and stores the raw output for each zone in a separate file.
 
