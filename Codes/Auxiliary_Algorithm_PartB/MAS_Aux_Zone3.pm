@@ -143,11 +143,11 @@ module R1
 					               -> (r1'=6);
 
 	// Operation mode R1 act as backup to R2
-	[lok]  (r1=5&s2=1)&(CTM2=2|CTM2=3)&(TL_R1=1) ->  (r1'=3); 
+	[]  (r1=5&s2=1)&(CTM2=2|CTM2=3)&(TL_R1=1) ->  (r1'=3); 
 	[] (r1=5)&(CTM2=3)&(s2=5|TL_R1=2)->  (r1'=3); 
 	[ft2] (r1=5)&(CTM2=2)&(s2=5|TL_R1=2)  ->  1-IED:(r1'=1)
 			                           +IED:(r1'=2);
-	[prim] (r1=3&TL1=0)  ->  (r1'=4);
+	[opr] (r1=3&TL1=0)  ->  (r1'=4);
         [] ((r1=5|r1=4)&(TRQ_R1=1|TL1=2))  ->  1-IED:(r1'=1)
 			                            +IED:(r1'=2); 
 	[] (r1=5&s2=4&TL1=0) ->   0.1:(r1'=3)&(TL1'=1) 
@@ -195,18 +195,18 @@ module R2
 					                 -> (r2'=5);
           // Operation mode
 	//R2 as prim if R3 fails
-	[prim] (r2=5& TL2=0&WD2=2)  ->  1-IED:(r2'=1)
+	[opr] (r2=5& TL2=0&WD2=2)  ->  1-IED:(r2'=1)
 			               +IED:(r2'=2);
 	//When CTM2=2 and TL not received by R1
 	[ft2] (r2=5& TL2=0&WD2=2)  ->  1-IED:(r2'=1)
 			               +IED:(r2'=2);
 
 	//R2 as backup to R3
-	[lock] (r2=5&s3=1)&(CTM3=2|CTM3=3)&(TL_R2=1)  ->  (r2'=3);
+	[] (r2=5&s3=1)&(CTM3=2|CTM3=3)&(TL_R2=1)  ->  (r2'=3);
 	[] (r2=5)&(CTM3=3)&(s3=5|TL_R2=2)->  (r2'=3); 
-	[ft1] (r2=5)&(CTM3=2)&(s3=5|TL_R2=2)  ->  1-IED:(r2'=1)
+	[ft3] (r2=5)&(CTM3=2)&(s3=5|TL_R2=2)  ->  1-IED:(r2'=1)
 			                           +IED:(r2'=2);
-	[prim_op] (r2=3&TL2=0)  ->  (r2'=4);
+	[opr3] (r2=3&TL2=0)  ->  (r2'=4);
         []    ((r2=5|r2=4)&(TRQ_R2=1|TL2=2))  ->  1-IED:(r2'=1)
 			                            +IED:(r2'=2); 
         [] (r2=5&s3=4&TL2=0) ->    0.1:(r2'=3)&(TL2'=1) 
@@ -254,10 +254,10 @@ module R3
 	[] (r3=0&sel3=4&IR3_F =0)&((b3=1)&b2>0&b1>0&sw>0&b4>0)  
 					                -> (r3'=6); 
         // Operation mode
-	[prim_op] (r3=5&TL3=0&WD3=2)   ->  1-IED:(r3'=1)
+	[opr3] (r3=5&TL3=0&WD3=2)   ->  1-IED:(r3'=1)
 			                   +IED:(r3'=2);	
 	//When CTM3=2 and TL not received by R2
-	[ft1] (r3=5& TL3=0&WD3=2)  ->  1-IED:(r3'=1)
+	[ft3] (r3=5& TL3=0&WD3=2)  ->  1-IED:(r3'=1)
 			               +IED:(r3'=2);
   	// Breaker signal sent or not
 	[] (r3=1&BC3=0)   ->  1-COM:(BC3'=1)
@@ -375,16 +375,16 @@ module Sig_Disp2
 	//4: TRQ1 not sent
 
 
-        [] (s2=0&r2=5&r1=5)&(CTM2=2|CTM2=3)  ->  1-COM:(s2'=1)
+        [lock2] (s2=0&r2=5&r1=5)&(CTM2=2|CTM2=3)  ->  1-COM:(s2'=1)
 						                        +COM:(s2'=5); 
-        [prim](r1=3&TL2=0)&(CTM2=2|CTM2=3)  ->  (s2'=2);
-        [](s2=0&WD2=1)  ->  1-COM:(s2'=3)
+        [opr](r1=3&TL2=0)&(CTM2=2|CTM2=3)  ->  (s2'=2);
+        [req2](s2=0&WD2=1)  ->  1-COM:(s2'=3)
 				       +COM:(s2'=4); 		
-	[] (s2=2)&(r2=2|BC2=2|(BC2=1&b2=3)) 
+	[req2] (s2=2)&(r2=2|BC2=2|(BC2=1&b2=3)) 
 			    ->  (s2'=3);
 endmodule
 
-module Sig_Disp3 = Sig_Disp2[s2=s3,CTM2=CTM3,r1=r2,TL2=TL3,WD2=WD3,r2=r3,BC2=BC3,b2=b3,prim=prim_op,TRQ2=TRQ3]endmodule
+module Sig_Disp3 = Sig_Disp2[s2=s3,CTM2=CTM3,r1=r2,TL2=TL3,WD2=WD3,r2=r3,BC2=BC3,b2=b3,opr=opr3,TRQ2=TRQ3,lock2=lock3, req2=req3]endmodule
 
 
 // Signal receiving module

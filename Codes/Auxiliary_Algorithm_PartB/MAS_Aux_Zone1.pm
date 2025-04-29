@@ -12,9 +12,9 @@ const int r3_nbr=3;
 const int r4_nbr=4;
 
 // PROBABILITITES
-const double IED=0.1;  // Relay failure
+const double IED;  // Relay failure
 const double BRK=0.1;  // Circuit breaker failure
-const double COM;      // Communication failure
+const double COM=0.1;      // Communication failure
 const double WD= 0.1;   // Internal error
 
 // GLOBAL VARAIBLES
@@ -141,7 +141,7 @@ module R1
         [] (r1=0)&(sel1=4)&(IR1_F =0)&((b1=1)&b2>0&b3>0&sw>0&b4>0)  
 					                   ->  (r1'=6); 
 	// Operation mode
-	[prim_op] (r1=5& TL1=0&WD1=2)  ->  1-IED:(r1'=1)
+	[opr] (r1=5& TL1=0&WD1=2)  ->  1-IED:(r1'=1)
 			                  +IED:(r1'=2);
        //When CTM1=2 and TL not received
 	[ft1] (r1=5& TL1=0&WD1=2)  ->  1-IED:(r1'=1)
@@ -149,7 +149,7 @@ module R1
 
 	// Breaker signal sent or not
 	[] (r1=1&BC1=0)  ->  1-COM:(BC1'=1)
-				    +COM:(BC1'=2);
+		            +COM:(BC1'=2);
 
  endmodule
 
@@ -183,25 +183,25 @@ module R2
 	[] (r2=0)&(!sel2=4)&(IR2_F >0)&(b1>0&b2=2&b3>0&sw=2&b4>0)  
 					                 ->  (r2'=5);     
 	// Operation mode
-	[prim] (r2=5&TL2=0&WD2=2)  ->  1-IED:(r2'=1)
+	[opr2] (r2=5&TL2=0&WD2=2)  ->  1-IED:(r2'=1)
 			               +IED:(r2'=2);
 	[ft2] (r2=5&TL2=0&WD2=2)  ->  1-IED:(r2'=1)
 			               +IED:(r2'=2);
 	// R2 as backup relay
-	[lock] (r2=5)&(s1=1)&(CTM1=2|CTM1=3)&(TL_R2=1)  ->  (r2'=3);
+	[] (r2=5)&(s1=1)&(CTM1=2|CTM1=3)&(TL_R2=1)  ->  (r2'=3);
 	[] (r2=5)&(CTM1=3)&(s1=5|TL_R2=2)  ->  (r2'=3);
 	[ft1] (r2=5)&(CTM1=2)&(s1=5|TL_R2=2)  ->  1-IED:(r2'=1)
 			                           +IED:(r2'=2);
-	[prim_op] (r2=3)&(TL2=0)  ->  (r2'=4); //Reset
+	[opr] (r2=3)&(TL2=0)  ->  (r2'=4); //Reset
 
         [] ((r2=5|r2=4)&(TRQ_R2=1|TL2=2))  ->  1-IED:(r2'=1)
-			                     +IED:(r2'=2); 
+			                       +IED:(r2'=2); 
 	[] (r2=5)&(s1=4)&(TL2=0)         ->  0.1:(r2'=3)&(TL2'=1) 
 			      		    +0.45:(r2'=5)&(TL2'=2)
-				                    +0.45:(r2'=4)&(TL2'=2);
+				            +0.45:(r2'=4)&(TL2'=2);
 	// Breaker signal sent or not
 	[] (r2=1)&(BC2=0)  ->  1-COM:(BC2'=1)
-				       +COM:(BC2'=2);
+			      +COM:(BC2'=2);
 	[] (sv2=1)&(BC2=0|BC2=2)  ->  (BC2'=1);
 //when R2 act as backup of R1
 	[] (sv2=1)&(BC2=0|BC2=2)  ->  (BC2'=1);
@@ -238,11 +238,11 @@ module R3
 	[] (r3=0)&(! sel3=4)&(IR3_F >0)&(b1>0&b2>0&b3=2&sw>0&b4>0)  
 					                 ->  (r3'=5); 
 	// R3 as backup relay  
-	[lok] (r3=5)&(s2=1)&(CTM2=2|CTM2=3)&(TL_R3=1) -> (r3'=3);
+	[] (r3=5)&(s2=1)&(CTM2=2|CTM2=3)&(TL_R3=1) -> (r3'=3);
 	[] (r3=5)&(CTM2=3)&(s2=5|TL_R3=2)  ->  (r3'=3);
 	[ft2] (r3=5)&(CTM2=2)&(s2=5|TL_R3=2) -> 1-IED:(r3'=1) 
-																			                         +IED:(r3'=2);
-	[prim] (r3=3)&(TL3=0)  ->  (r3'=4);
+                                               +IED:(r3'=2);
+	[opr2] (r3=3)&(TL3=0)  ->  (r3'=4);
 	[] ((r3=5|r3=4)&(TRQ_R3=1|TL3=2))  ->  1-IED:(r3'=1)
 			                     +IED: (r3'=2); 
 	[] (r3=5)&(s2=4)&(TL3=0)  ->  0.1:(r3'=3)&(TL3'=1) 
@@ -354,13 +354,13 @@ module Sig_Disp1
 	//3: TRQ1 sent
 	//4: TRQ1 not sent
 
-	[] (s1=0& (CTM1=2|CTM1=3))  -> 1-COM:(s1'=1)
-						             +COM:(s1'=5); //TL1 not sent 
-        [prim_op] (r2=3&TL1=0&(CTM1=2|CTM1=3))  -> (s1'=2);
+	[lock] (s1=0& (CTM1=2|CTM1=3))  -> 1-COM:(s1'=1)
+				     +COM:(s1'=5); //TL1 not sent 
+        [opr] (r2=3&TL1=0&(CTM1=2|CTM1=3))  -> (s1'=2);
 
-	[] (s1=0&WD1=1)  ->  1-COM:(s1'=3)
+	[req] (s1=0&WD1=1)  ->  1-COM:(s1'=3)
 				        +COM:(s1'=4); 	
-	[] (s1=2)&((r1=2|BC1=2)|(BC1=1&b1=3))  -> (s1'=3); 
+	[req] (s1=2)&((r1=2|BC1=2)|(BC1=1&b1=3))  -> (s1'=3); 
 
 endmodule
 
@@ -375,13 +375,13 @@ module Sig_Disp2
 	//3: TRQ1 sent
 	//4: TRQ1 not sent
 
-        [] (s2=0&(CTM2=2|CTM2=3))  -> 1-COM:(s2'=1)
+        [lock2] (s2=0&(CTM2=2|CTM2=3))  -> 1-COM:(s2'=1)
 												            +COM:(s2'=5); 
 
-        [prim] (r3=3&TL2=0&(CTM2=2|CTM2=3))  -> (s2'=2);
-        [] (s2=0&WD2=1)  ->  1-COM:(s2'=3)
+        [opr2] (r3=3&TL2=0&(CTM2=2|CTM2=3))  -> (s2'=2);
+        [req2] (s2=0&WD2=1)  ->  1-COM:(s2'=3)
 					     +COM:(s2'=4);		
-	[] (s2=2)&(r2=2|BC2=2|(BC2=1&b2=3))  -> (s2'=3);
+	[req2] (s2=2)&(r2=2|BC2=2|(BC2=1&b2=3))  -> (s2'=3);
 endmodule
 
 
@@ -442,6 +442,8 @@ label "Fail1"= ((WD1=2)&(CTM1=2|CTM1=3)&((r1=1&BC1=1&b1=3&b2=3)
 	       |(r1=1&BC1=2&b2=3)|(r1=2&b2=3)))|((WD1=1&b2=3)&(s1=3|s1=4));
 label "Fail2"=((WD2=2)&(CTM2=2|CTM2=3)&((r2=1&BC2=1&b2=3&b3=3)
 	      |(r2=1&BC2=2&b3=3)|(r2=2&b3=3)))|((WD2=1& b3=3)&(s2=3|s2=4));
+
+
 
 label "WD1"=(r1=5&sel1=0)&(r2=5&sel2=1) ;
 label "WD2" = (r2=5&sel2=1&r1=6)&(r3=5&sel3=2);
