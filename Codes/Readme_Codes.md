@@ -3,7 +3,7 @@
 [![PRISM Model Checker](https://img.shields.io/badge/PRISM-4.8-blue)](https://www.prismmodelchecker.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-This repository contains PRISM models and properties used to evaluate and compare three protection algorithms for power distribution networks under different failure scenarios. All models are formalized using the PRISM 4.8 toolset.
+This repository contains PRISM models and properties used to evaluate and compare three protection algorithms for power distribution networks under different fault scenarios. All models are formalized using the PRISM 4.8 toolset.
 
 ## 1. Algorithms Overview
 
