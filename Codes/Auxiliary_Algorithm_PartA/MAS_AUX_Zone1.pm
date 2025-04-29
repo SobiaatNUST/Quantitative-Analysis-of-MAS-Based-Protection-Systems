@@ -43,16 +43,16 @@ module DG1
 	// 0: Zero current
 	// 1: Non-zero current
 
-	[] (DG1=0&IDG1=0&FC1=1)  ->   0.5: (DG1'=1)&(IDG1'=0)
+	[a] (DG1=0&IDG1=0&FC1=1)  ->   0.5: (DG1'=1)&(IDG1'=0)
 		    			              +0.5:(DG1'=2)&(IDG1'=1);
 
 endmodule
 
 
 // Constructing remaining modules through renaming
-module DG2 = DG1[IDG1=IDG2,DG1=DG2,FC1=FC1]endmodule
-module DG3 = DG1[IDG1=IDG3,DG1=DG3,FC1=FC1]endmodule
-module DG4 = DG1[IDG1=IDG4,DG1=DG4,FC1=FC1]endmodule
+module DG2 = DG1[a=a,IDG1=IDG2,DG1=DG2,FC1=FC1]endmodule
+module DG3 = DG1[a=a,IDG1=IDG3,DG1=DG3,FC1=FC1]endmodule
+module DG4 = DG1[a=a,IDG1=IDG4,DG1=DG4,FC1=FC1]endmodule
 
 
 // Configuration check from breakers CB and SW status
@@ -157,7 +157,7 @@ module R1
         [] (r1=0)&(sel1=4)&(IR1_F =0)&((b1=1)&b2>0&b3>0&sw>0&b4>0)  
 					                   ->  (r1'=6); 
 	// Operation mode
-	[prim_op] (r1=5& TL1=0&WD1=2)  ->  1-IED:(r1'=1)
+	[opr] (r1=5& TL1=0&WD1=2)  ->  1-IED:(r1'=1)
 			                  +IED:(r1'=2);
 	// Breaker signal sent or not
 	[] (r1=1&BC1=0)  ->  1-COM:(BC1'=1)
@@ -201,11 +201,11 @@ module R2
 	[] (r2=0)&(!sel2=4)&(IR2_F >0)&(b1>0&b2=2&b3>0&sw=2&b4>0)  
 					                 ->  (r2'=5);     
 	// Operation mode
-	[prim] (r2=5&TL2=0&WD2=2)  ->  1-IED:(r2'=1)
+	[opr2] (r2=5&TL2=0&WD2=2)  ->  1-IED:(r2'=1)
 			               +IED:(r2'=2);
 	// R2 as backup relay
 	[lock] (r2=5)&(s1=0)  ->  (r2'=3);
-	[prim_op] (r2=3)&(TL2=0)  ->  (r2'=4);
+	[opr] (r2=3)&(TL2=0)  ->  (r2'=4);
         [] ((r2=5|r2=4)&(TRQ_R2=1|TL2=2))  ->  1-IED:(r2'=1)
 			                           +IED:(r2'=2); 
 	[] (r2=5)&(s1=4)&(TL2=0)  ->  0.1:(r2'=3)&(TL2'=1) 
@@ -250,8 +250,8 @@ module R3
 	[] (r3=0)&(! sel3=4)&(IR3_F >0)&(b1>0&b2>0&b3=2&sw>0&b4>0)  
 					                 ->  (r3'=5); 
 	// R3 as backup relay    
-	[lok] (r3=5)&(s2=0)&(CTM2=2|CTM2=3) -> (r3'=3);
-	[prim] (r3=3)&(TL3=0)  ->  (r3'=4);
+	[lock2] (r3=5)&(s2=0)&(CTM2=2|CTM2=3) -> (r3'=3);
+	[opr2] (r3=3)&(TL3=0)  ->  (r3'=4);
 	[] ((r3=5|r3=4)&(TRQ_R3=1|TL3=2))  ->  1-IED:(r3'=1)
 			                           +IED: (r3'=2); 
 	[] (r3=5)&(s2=4)&(TL3=0)  ->  0.1:(r3'=3)&(TL3'=1) 
@@ -364,10 +364,10 @@ module Sig_Disp1
 	//4: TRQ1 not sent
 
         [lock] (s1=0& (CTM1=2|CTM1=3))  ->  (s1'=1); 
-        [prim_op] (r2=3&TL1=0&(CTM1=2|CTM1=3)) ->  (s1'=2);
-	[] (s1=0&WD1=1)  ->  1-COM:(s1'=3)
+        [opr] (r2=3&TL1=0&(CTM1=2|CTM1=3)) ->  (s1'=2);
+	[req] (s1=0&WD1=1)  ->  1-COM:(s1'=3)
 				        +COM:(s1'=4); 		
-	[] (s1=2)&((r1=2|BC1=2)|(BC1=1&b1=3))  ->  (s1'=3);
+	[req] (s1=2)&((r1=2|BC1=2)|(BC1=1&b1=3))  ->  (s1'=3);
 
 
 endmodule
@@ -381,11 +381,11 @@ module Sig_Disp2
 	//3: TRQ1 sent
 	//4: TRQ1 not sent
 
-        [lok] (s2=0&(CTM2=2|CTM2=3))  ->  (s2'=1); 
-        [prim] (r3=3&TL2=0&(CTM2=2|CTM2=3))  ->  (s2'=2);
-        [] (s2=0&WD2=1)  ->  1-COM:(s2'=3)
+        [lock2] (s2=0&(CTM2=2|CTM2=3))  ->  (s2'=1); 
+        [opr2] (r3=3&TL2=0&(CTM2=2|CTM2=3))  ->  (s2'=2);
+        [req2] (s2=0&WD2=1)  ->  1-COM:(s2'=3)
 					        +COM:(s2'=4);		
-	[] (s2=2)&(r2=2|BC2=2|(BC2=1&b2=3))  ->  (s2'=3);
+	[req2] (s2=2)&(r2=2|BC2=2|(BC2=1&b2=3))  ->  (s2'=3);
 
 
 endmodule
