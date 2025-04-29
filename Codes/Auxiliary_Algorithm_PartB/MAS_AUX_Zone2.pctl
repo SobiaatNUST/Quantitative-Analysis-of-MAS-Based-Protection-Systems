@@ -10,3 +10,5 @@ P=? [ F ("Succ1"|"Succ2") ]
 
 P=? [ F ("False_Trip1"|"False_Trip2") ]
 
+P=? [ (F "Cond1"&(F "Succ1"))|(F "Cond2"&(F "Succ2"))]
+

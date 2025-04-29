@@ -12,3 +12,9 @@ P=? [ (F "Cond1"&(F "False_Trip1"))|(F "Cond2"&(F "False_Trip2"))|(F "Cond3"&(F 
 
 P=? [ F ("risk") ]
 
+P=? [ F ("Succ1"|"Succ2"|"Succ3") ]
+
+P=? [ F ("False_Trip1"|"False_Trip2"|"False_Trip3")] 
+
+P=?[ (F "Cond1"&(F "False_Trip_isol1"))|(F "Cond2"&(F "False_Trip_isol2"))|(F "Cond3"&(F "False_Trip_isol3")) ]
+
