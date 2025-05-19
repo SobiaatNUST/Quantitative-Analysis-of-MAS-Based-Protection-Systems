@@ -81,7 +81,7 @@ Please feel free to submit issues or pull requests if you have suggestions for i
 
 ## Citation
 
-If you use these models in your research, please cite our work.
+If you use these models in your research, please cite our work. SobiaatNUST. (2025). SobiaatNUST/Quantitative-Analysis-of-MAS-Based-Protection-Systems: Probabilistic Verification of Protection Algorithms Using PRISM Model Checker (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.15301329
 
 ## License
 
